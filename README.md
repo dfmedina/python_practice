@@ -1,2 +1,2 @@
-# python_practice
-Practica para el mentoreo como Python Dev
+# python_training
+Repositorio para ejercicios del training de Python
