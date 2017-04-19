@@ -13,8 +13,10 @@ class SetEmulator(object):
         if item in self.elements:
             self.elements.remove(item)
 
-    def contains(self, item):
-        return item in self.elements
+    def difference(self, iterable=()):
+        for item in iterable.elements:
+            if item in self.elements:
+                return item
 
     def iter(self):
         return iter(self.elements)

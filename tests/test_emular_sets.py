@@ -17,21 +17,30 @@ Create a class to represent and handle a Set. The class must provide the next op
 
 import unittest
 from scripts.set_emulator import SetEmulator
+import logging
 
 
 class TestEmulateSets(unittest.TestCase):
+    # logging.basicConfig(filename='Unittest_results.log', level=logging.INFO)
 
     def setUp(self):
-        self.set_instance = SetEmulator()
+        self.set_instance = SetEmulator([1, 2, ('a', None), 4, 5, 5, 4, ('a', None), [0, 1, 2, 3, 4]])
+        # logging.log(logging.INFO, ("Set instance: %", self.set_instance.elements))
 
     def test_add_element(self):
-        pass
+        new_element = 7
+        self.set_instance.add(new_element)
+        self.assertIn(new_element, self.set_instance.elements)
 
     def test_remove_element(self):
-        pass
+        remove_element = ('a', None)
+        self.set_instance.remove(remove_element)
+        self.assertNotIn(remove_element, self.set_instance.elements)
 
     def test_get_difference(self):
-        pass
+        snd_set = SetEmulator([1, 2, 0, ('a', None)])
+        self.assertIn(self.set_instance.difference(snd_set), self.set_instance.elements)
+
 
     def test_get_intersection(self):
         pass
