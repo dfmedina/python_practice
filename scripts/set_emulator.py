@@ -14,12 +14,18 @@ class SetEmulator(object):
             self.elements.remove(item)
 
     def difference(self, iterable=()):
+        result_set = []
+        for item in iterable.elements:
+            if item not in self.elements:
+                result_set.append(item)
+        return result_set
+
+    def intersection(self, iterable=()):
+        result_set = []
         for item in iterable.elements:
             if item in self.elements:
-                return item
-
-    def iter(self):
-        return iter(self.elements)
+                result_set.append(item)
+        return result_set
 
     def len(self):
         return len(self.elements)

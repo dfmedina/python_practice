@@ -38,12 +38,13 @@ class TestEmulateSets(unittest.TestCase):
         self.assertNotIn(remove_element, self.set_instance.elements)
 
     def test_get_difference(self):
-        snd_set = SetEmulator([1, 2, 0, ('a', None)])
-        self.assertIn(self.set_instance.difference(snd_set), self.set_instance.elements)
-
+        snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
+        self.assertNotIn(self.set_instance.difference(snd_set), self.set_instance.elements)
 
     def test_get_intersection(self):
-        pass
+        snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
+        self.assertTrue(self.assertIn(self.set_instance.intersection(snd_set), snd_set.elements) and
+                        self.assertIn(self.set_instance.intersection(snd_set), self.set_instance.elements))
 
     def test_get_included(self):
         pass
