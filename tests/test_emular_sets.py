@@ -18,6 +18,7 @@ Create a class to represent and handle a Set. The class must provide the next op
 import unittest
 from scripts.set_emulator import SetEmulator
 import logging
+import sets
 
 
 class TestEmulateSets(unittest.TestCase):
@@ -25,6 +26,8 @@ class TestEmulateSets(unittest.TestCase):
 
     def setUp(self):
         self.set_instance = SetEmulator([1, 2, ('a', None), 4, 5, 5, 4, ('a', None), [0, 1, 2, 3, 4]])
+        a = sets.Set
+        a.symmetric_difference()
         # logging.log(logging.INFO, ("Set instance: %", self.set_instance.elements))
 
     def test_add_element(self):
@@ -39,6 +42,7 @@ class TestEmulateSets(unittest.TestCase):
 
     def test_get_difference(self):
         snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
+        print(self.set_instance.difference(snd_set))
         self.assertNotIn(self.set_instance.difference(snd_set), self.set_instance.elements)
 
     def test_get_intersection(self):

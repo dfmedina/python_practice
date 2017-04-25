@@ -22,7 +22,9 @@ Referencia de Conjuntos:
 https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica
 https://es.wikipedia.org/wiki/Producto_cartesiano
 https://es.wikipedia.org/wiki/Conjunto_potencia
-Cálculo Matricial
+
+
+##Cálculo Matricial
 Crear una clase que permita representar una matriz de cualquier orden o forma (n x n, n x m). 
 También debe permitir realizar las siguientes operaciones con matrices.
 
