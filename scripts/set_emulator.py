@@ -1,57 +1,49 @@
-from itertools import ifilter, ifilterfalse
-
-
 class SetEmulator(object):
 
     def __init__(self, iterable=None):
-        """Construct a set from an optional iterable."""
-        self.info = {}
+        self._data = {}
         if iterable is not None:
-            self._update(iterable)
+            self.add(iterable)
 
-    def add(self, item):
-        if item not in self.elements:
-            self.elements.append(item)
+    def __repr__(self):
+        elements = self._data.keys()
+        if sorted:
+            elements.sort()
+        return '%s(%r)' % (self.__class__.__name__, elements)
+
+    def add(self, iterable):
+        value = True
+        if type(iterable) in (list, tuple, dict):
+            it = iter(iterable)
+            while True:
+                for element in it:
+                    self._data[element] = value
+                return
+        else:
+            self._data[iterable] = value
 
     def remove(self, item):
-        if item in self.elements:
-            self.elements.remove(item)
+        del self._data[item]
 
     def difference(self, other):
-        """Return the symmetric difference of two sets as a new set.
+        result = []
+        data = self._data
+        otherdata = other._data
+        for item in otherdata.keys():
+            if item not in data.keys():
+                result.append(item)
+        return self.__class__(result)
 
-                (I.e. all elements that are in exactly one of the sets.)
+    def intersection(self, other):
+        result = []
+        data = self._data
+        otherdata = other._data
+        for item in otherdata.keys():
+            if item in data.keys():
+                result.append(item)
+        return self.__class__(result)
 
-        """
-        result = self.__class__()
-        data = result._data
-        value = True
-        selfdata = self._data
-        try:
-            otherdata = other._data
-        except AttributeError:
-            otherdata = SetEmulator(other)._data
-        for elt in ifilterfalse(otherdata.__contains__, selfdata):
-            data[elt] = value
-        for elt in ifilterfalse(selfdata.__contains__, otherdata):
-            data[elt] = value
-        return result
-
-        """
-        result_set = []
-        for item in iterable.elements:
-            if item not in self.elements:
-                result_set.append(item)
-        return result_set
-        """
-
-    def intersection(self, iterable=()):
-        result_set = []
-        for item in iterable.elements:
-            if item in self.elements:
-                result_set.append(item)
-        return result_set
-
+    '''
     def len(self):
         return len(self.elements)
 
@@ -62,10 +54,4 @@ class SetEmulator(object):
             del self.elements[self.elements.index(item)]
         except ValueError:
             pass
-
-
-if __name__ == '__main__':
-    set_instance = Set()
-    set_instance.add()
-    set_instance.remove()
-
+    '''
