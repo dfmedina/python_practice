@@ -31,19 +31,12 @@ class SetEmulator(object):
         del self._data[item]
 
     def intersection(self, other):
-        result = list(self.elements() & other.elements())
-        return self.__class__(result)
+        return list(self.elements() & other.elements())
 
     def difference(self, other):
-        result = []
-        inter = self.intersection(other).elements()
-        for elem in other.elements():
-            if elem not in inter:
-                result.append(elem)
-        for item in self.elements():
-            if item not in inter:
-                result.append(item)
-        return self.__class__(result)
+        self_elements = list(self.elements())
+        other_elements = list(other.elements())
+        return [a for a in self_elements + other_elements if (a not in self_elements) or (a not in other_elements)]
 
     def is_included(self, snd_set):
         for elem in snd_set.elements():
@@ -52,17 +45,9 @@ class SetEmulator(object):
         return True
 
     def symmetrical_difference(self, other):
-        result = self.__class__()
-        data = result._data
-        value = True
-        selfdata = self._data
-        try:
-            otherdata = other._data
-        except AttributeError:
-            otherdata = Set(other)._data
-        for elt in ifilterfalse(otherdata.__contains__, selfdata):
-            data[elt] = value
-        for elt in ifilterfalse(selfdata.__contains__, otherdata):
-            data[elt] = value
-        return result
+        self_elements = list(self.elements())
+        other_elements = list(other.elements())
+        sym_diff = set(i for i in self_elements) ^ set(i for i in other_elements)
+        return [i for i in self_elements if i in sym_diff] + [i for i in other_elements if i in sym_diff]
+
 

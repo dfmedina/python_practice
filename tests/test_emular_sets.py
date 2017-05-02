@@ -39,13 +39,11 @@ class TestEmulateSets(unittest.TestCase):
 
     def test_get_intersection(self):
         snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
-        self.assertIsInstance(self.set_instance.intersection(snd_set), SetEmulator)
-        print(self.set_instance.intersection(snd_set).elements())
+        print(self.set_instance.intersection(snd_set))
 
     def test_get_difference(self):
         snd_set = SetEmulator([1, 2, 0, ('a', None), 'z', 'a'])
-        self.assertIsInstance(self.set_instance.difference(snd_set), SetEmulator)
-        print(self.set_instance.difference(snd_set).elements())
+        print(self.set_instance.difference(snd_set))
 
     def test_get_is_included(self):
         snd_set = SetEmulator([1, 2, ('a', None)])
@@ -54,7 +52,8 @@ class TestEmulateSets(unittest.TestCase):
         self.assertFalse(self.set_instance.is_included(trd_set))
 
     def test_symmetrical_difference(self):
-        pass
+        snd_set = SetEmulator([1, 2, 0, ('a', None), 'z', 'a'])
+        print(self.set_instance.symmetrical_difference(snd_set))
 
     def test_cartesian_product(self):
         pass
