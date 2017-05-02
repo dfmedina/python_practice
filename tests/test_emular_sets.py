@@ -18,40 +18,40 @@ Create a class to represent and handle a Set. The class must provide the next op
 import unittest
 from scripts.set_emulator import SetEmulator
 import logging
-import sets
 
 
 class TestEmulateSets(unittest.TestCase):
     # logging.basicConfig(filename='Unittest_results.log', level=logging.INFO)
 
     def setUp(self):
-        self.set_instance = SetEmulator([1, 2, ('a', None), 4, 5, 5, 4, ('a', None)])
-        #a = sets.Set
-        #a.symmetric_difference()
+        self.set_instance = SetEmulator([1, 2, ('a', None), 4, 'z', 5, 4, ('a', None)])
         # logging.log(logging.INFO, ("Set instance: %", self.set_instance.elements))
 
     def test_add_element(self):
         new_element = 7
         self.set_instance.add(new_element)
-        self.assertIn(new_element, self.set_instance._data.keys())
+        self.assertIn(new_element, self.set_instance.elements())
 
     def test_remove_element(self):
         remove_element = ('a', None)
         self.set_instance.remove(remove_element)
-        self.assertNotIn(remove_element, self.set_instance._data.keys())
-
-    def test_get_difference(self):
-        snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
-        self.assertIsInstance(self.set_instance.difference(snd_set), SetEmulator)
-        self.assertNotIn(self.set_instance.difference(snd_set)._data.keys(), self.set_instance._data.keys())
+        self.assertNotIn(remove_element, self.set_instance.elements())
 
     def test_get_intersection(self):
         snd_set = SetEmulator([1, 2, 0, ('a', None), 'z'])
         self.assertIsInstance(self.set_instance.intersection(snd_set), SetEmulator)
-        self.assertListEqual(self.set_instance.intersection(snd_set)._data.keys(), self.set_instance._data.keys())
+        print(self.set_instance.intersection(snd_set).elements())
 
-    def test_get_included(self):
-        pass
+    def test_get_difference(self):
+        snd_set = SetEmulator([1, 2, 0, ('a', None), 'z', 'a'])
+        self.assertIsInstance(self.set_instance.difference(snd_set), SetEmulator)
+        print(self.set_instance.difference(snd_set).elements())
+
+    def test_get_is_included(self):
+        snd_set = SetEmulator([1, 2, ('a', None)])
+        trd_set = SetEmulator([1, 2, ('a', None), 'w'])
+        self.assertTrue(self.set_instance.is_included(snd_set))
+        self.assertFalse(self.set_instance.is_included(trd_set))
 
     def test_symmetrical_difference(self):
         pass

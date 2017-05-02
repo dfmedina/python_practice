@@ -1,7 +1,7 @@
 # Python Training
 Repositorio para ejercicios del training de Python
 
-Emular Sets
+###Emular Sets
 Crear una clase para representar y manipular un Set (conjunto). La clase Set debe proveer las siguientes operaciones:
 
 - Agregar un elemento al Set.
@@ -18,13 +18,13 @@ Se puede definir un Set y sus elementos al momento de crear una instancia de la 
 Set([1,2,3,4,5,6,1,4])
 No usar el tipo 'set' ya incluído en el lenguaje en su implementación.
 
-Referencia de Conjuntos:
+######Referencia de Conjuntos:
 https://es.wikipedia.org/wiki/Diferencia_sim%C3%A9trica
 https://es.wikipedia.org/wiki/Producto_cartesiano
 https://es.wikipedia.org/wiki/Conjunto_potencia
 
 
-##Cálculo Matricial
+###Cálculo Matricial
 Crear una clase que permita representar una matriz de cualquier orden o forma (n x n, n x m). 
 También debe permitir realizar las siguientes operaciones con matrices.
 
@@ -36,7 +36,7 @@ También debe permitir realizar las siguientes operaciones con matrices.
 - Matriz adjunta
 - Matriz inversa
 
-Agregar métodos adicionales:
+#####Agregar métodos adicionales:
 
 - Un método para obtener una filas de una matriz. No devolver filas repetidas.
 Por ejemplo, se puede indicar que se desean la filas 1, 3, 8 de una matriz de 20 x 10.
@@ -54,7 +54,7 @@ Matrix([[1,2,3,4,5,6],
 	[10,11,12,13,14,15],
 	[-1,-2,-3,-4,-5,-6]])
 
-Referencia de Cálculo Matricial:
+######Referencia de Cálculo Matricial:
 http://matematicasbachiller.com/videos/2-bachillerato/introduccion-al-algebra-de-lo-lineal/01-calculo-matricial-6
 
 Sistema de archivos: Implementar el comando tree
@@ -74,7 +74,9 @@ A continuación se puede ver un ejemplo de salida de la ejecución de un comando
 │   └── logo.jpg
 ├── program.exe
 └── readme.txt
-ETL
+
+###ETL
+
 Procesando el archivo con datos de 5000 películas extraídas de IMDB, contestar las preguntas o consultas que aparecen más abajo. Mostrar los resultados obtenidos en un documento HTML(simple). Adicionalmente, agregar el tiempo que toma el procesar los datos para lograr los requerimientos.
 
 - ¿Cuantas peliculas a "color" y "blanco y negro" hay en la lista?

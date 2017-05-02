@@ -1,15 +1,20 @@
-class SetEmulator(object):
+"""
+Class that emulates the behaviour of the Set
+"""
 
+
+class SetEmulator(object):
     def __init__(self, iterable=None):
+        """
+        Constructor for the SetEmulator class
+        :param iterable: data that the set will have in its initialization
+        """
         self._data = {}
         if iterable is not None:
             self.add(iterable)
 
-    def __repr__(self):
-        elements = self._data.keys()
-        if sorted:
-            elements.sort()
-        return '%s(%r)' % (self.__class__.__name__, elements)
+    def elements(self):
+        return self._data.keys()
 
     def add(self, iterable):
         value = True
@@ -25,33 +30,39 @@ class SetEmulator(object):
     def remove(self, item):
         del self._data[item]
 
+    def intersection(self, other):
+        result = list(self.elements() & other.elements())
+        return self.__class__(result)
+
     def difference(self, other):
         result = []
-        data = self._data
-        otherdata = other._data
-        for item in otherdata.keys():
-            if item not in data.keys():
+        inter = self.intersection(other).elements()
+        for elem in other.elements():
+            if elem not in inter:
+                result.append(elem)
+        for item in self.elements():
+            if item not in inter:
                 result.append(item)
         return self.__class__(result)
 
-    def intersection(self, other):
-        result = []
-        data = self._data
-        otherdata = other._data
-        for item in otherdata.keys():
-            if item in data.keys():
-                result.append(item)
-        return self.__class__(result)
+    def is_included(self, snd_set):
+        for elem in snd_set.elements():
+            if elem not in self.elements():
+                return False
+        return True
 
-    '''
-    def len(self):
-        return len(self.elements)
-
-
-
-    def discard(self, item):
+    def symmetrical_difference(self, other):
+        result = self.__class__()
+        data = result._data
+        value = True
+        selfdata = self._data
         try:
-            del self.elements[self.elements.index(item)]
-        except ValueError:
-            pass
-    '''
+            otherdata = other._data
+        except AttributeError:
+            otherdata = Set(other)._data
+        for elt in ifilterfalse(otherdata.__contains__, selfdata):
+            data[elt] = value
+        for elt in ifilterfalse(selfdata.__contains__, otherdata):
+            data[elt] = value
+        return result
+
