@@ -1,6 +1,7 @@
 """
 Class that emulates the behaviour of the Set
 """
+from itertools import chain, combinations
 
 
 class SetEmulator(object):
@@ -31,7 +32,10 @@ class SetEmulator(object):
         del self._data[item]
 
     def intersection(self, other):
-        return list(self.elements() & other.elements())
+        self_elements = list(self.elements())
+        other_elements = list(other.elements())
+        result = [a for a in self_elements + other_elements if (a in self_elements) and (a in other_elements)]
+        return list(self.__class__(result).elements())
 
     def difference(self, other):
         self_elements = list(self.elements())
@@ -50,4 +54,11 @@ class SetEmulator(object):
         sym_diff = set(i for i in self_elements) ^ set(i for i in other_elements)
         return [i for i in self_elements if i in sym_diff] + [i for i in other_elements if i in sym_diff]
 
+    def cartesian_product(self, other):
+        self_elements = list(self.elements())
+        other_elements = list(other.elements())
+        return [(s_elem, o_elem) for s_elem in self_elements for o_elem in other_elements]
 
+    def power(self):
+        s = list(self.elements())
+        return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
