@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-This module contains a set of test cases for the exercise: Emulate Sets
+This module contains a set of test cases for the exercise: ETL Movies
 
 Create a class to represent and handle a Set. The class must provide the next operations:
 
