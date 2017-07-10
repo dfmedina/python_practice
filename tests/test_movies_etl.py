@@ -1,6 +1,8 @@
+# encoding=utf8
 
 import unittest
 import os
+
 
 from scripts.movies_etl import MoviesEtl
 import logging
@@ -13,7 +15,9 @@ class TestMoviesEtl(unittest.TestCase):
 
     def test_color_nocolor_movies(self):
         movies_searcher = MoviesEtl()
-        movies_searcher.color_nocolor_movies(self._dataset)
+        a, b = movies_searcher.color_nocolor_movies(self._dataset)
+        print("Black and White movies: ", a)
+        print("Colored movies: ", b)
         pass
 
 if __name__ == 'main':
