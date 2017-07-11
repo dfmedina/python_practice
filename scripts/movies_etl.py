@@ -7,15 +7,21 @@ class MoviesEtl(object):
     def __init__(self):
         pass
 
-    def color_nocolor_movies(self, _dataset):
-        """
+    def columnar_movies(self, _dataset):
+        fh = FileHandler()
+        return fh.get_dataset_in_columns(fh.get_doc_data(_dataset))
 
+    @staticmethod
+    def color_nocolor_movies(_dataset):
+        """
+        Get the amount of Colored and Black and White movies for a given dataset
         :param _dataset : defined as path
         """
         bw = 0
         colored = 0
         fh = FileHandler()
-        color_types = fh.csv_mapper(0, _dataset)
+        movies_dataset = fh.get_doc_data(_dataset)
+        color_types = fh.get_column(0, movies_dataset)
         for c in color_types:
             if c == ' Black and White':
                 bw += 1
@@ -29,10 +35,26 @@ class FileHandler(object):
     def __init__(self):
         pass
 
-    def csv_mapper(self, column, _dataset):
+    @staticmethod
+    def get_doc_data(_dataset):
+        return open(_dataset, 'r', encoding="utf8")
+
+    @staticmethod
+    def get_dataset_in_columns(_dataset):
+        column = {}
+        reader = csv.reader(_dataset, delimiter=',', quotechar='|')
+        headers = next(reader)
+        for h in headers:
+            column[h] = []
+        for row in reader:
+            for h, v in zip(headers, row):
+                column[h].append(v)
+        return column
+
+    @staticmethod
+    def get_column(column, _dataset):
         result = []
-        with open(_dataset, 'r', encoding="utf8") as csv_file:
-            spam_reader = csv.reader(csv_file, delimiter=',', quotechar='|')
-            for row in spam_reader:
-                result.append(row[column])
+        spam_reader = csv.reader(_dataset, delimiter=',', quotechar='|')
+        for row in spam_reader:
+            result.append(row[column])
         return result
