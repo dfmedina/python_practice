@@ -11,19 +11,26 @@ class TestMoviesEtl(unittest.TestCase):
     _dir = os.path.dirname(__file__)
     _dataset = os.path.join(_dir, '..\\dataset\\movie_metadata.csv')
     m = MoviesEtl()
-    c_movies = m.columnar_movies(_dataset)
+    # c_movies = m.columnar_movies(_dataset)
+    film_matrix = m.matrix_movies(_dataset)
 
     def test_color_nocolor_movies(self):
-        cm = self.c_movies['color'].count('Color')
-        bwm = self.c_movies['color'].count(' Black and White')
+        colored_films = 0
+        bw_films = 0
+        for film in self.film_matrix:
+            if film[0] == 'Color':
+                colored_films += 1
+            elif film[0] == ' Black and White':
+                bw_films += 1
+        print('Colored films: ' + str(colored_films))
+        print('Black and White films: ' + str(bw_films))
 
     def test_amount_movies_per_director(self):
-        ds = self.c_movies['director_name']
-        all_directors = set(ds)
-        for d in all_directors:
+        ds = [director[1] for director in self.film_matrix if director[1] != '' and director[1] != 'director_name']
+        directors = set(ds)
+        for dire in directors:
             print('\n')
-            print('The director ' + d + ' directed ' + str(ds.count(d)) + ' movies.')
-            print('\n')
+            print('Director ' + dire + ' directed ' + str(ds.count(dire))+' films')
 
     def test_10_movies_lest_criticized(self):
         m_indexes = []
@@ -38,8 +45,7 @@ class TestMoviesEtl(unittest.TestCase):
             print(self.c_movies['movie_title'][mi])
 
     def test_20_longest_movies(self):
-        print(self.c_movies['movie_title'][750])
-        pass
+        print(self.film_matrix[1])
 
 
 if __name__ == 'main':

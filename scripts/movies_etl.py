@@ -11,6 +11,10 @@ class MoviesEtl(object):
         fh = FileHandler()
         return fh.get_dataset_in_columns(fh.get_doc_data(_dataset))
 
+    def matrix_movies(self, _dataset):
+        fh = FileHandler()
+        return fh.get_data_matrix(fh.get_doc_data(_dataset))
+
     @staticmethod
     def color_nocolor_movies(_dataset):
         """
@@ -39,6 +43,7 @@ class FileHandler(object):
     def get_doc_data(_dataset):
         return open(_dataset, 'r', encoding="utf8")
 
+
     @staticmethod
     def get_dataset_in_columns(_dataset):
         column = {}
@@ -58,3 +63,11 @@ class FileHandler(object):
         for row in spam_reader:
             result.append(row[column])
         return result
+
+    def get_data_matrix(self, _dataset):
+        spamreader = csv.reader(_dataset, delimiter=',')
+        list_of_list = []
+        data = list(list(rec) for rec in spamreader)  # reads csv into a list of lists
+        for row in data:
+            list_of_list.append(list(row))
+        return list_of_list
