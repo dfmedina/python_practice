@@ -15,15 +15,9 @@ class TestMoviesEtl(unittest.TestCase):
     film_matrix = m.matrix_movies(_dataset)
 
     def test_color_nocolor_movies(self):
-        colored_films = 0
-        bw_films = 0
-        for film in self.film_matrix:
-            if film[0] == 'Color':
-                colored_films += 1
-            elif film[0] == ' Black and White':
-                bw_films += 1
-        print('Colored films: ' + str(colored_films))
-        print('Black and White films: ' + str(bw_films))
+        bwc_films = [film[0] for film in self.film_matrix if film[0] != '' and film[0] != 'color']
+        print('Colored films: ' + str(bwc_films.count('Color')))
+        print('Black and White films: ' + str(bwc_films.count(' Black and White')))
 
     def test_amount_movies_per_director(self):
         ds = [director[1] for director in self.film_matrix if director[1] != '' and director[1] != 'director_name']
@@ -33,20 +27,48 @@ class TestMoviesEtl(unittest.TestCase):
             print('Director ' + dire + ' directed ' + str(ds.count(dire))+' films')
 
     def test_10_movies_lest_criticized(self):
-        m_indexes = []
-        m = (self.c_movies['num_critic_for_reviews'])
-        movie_critics = [x for x in (self.c_movies['num_critic_for_reviews']) if x != '']
-        movie_critics = list(map(int, movie_critics))
-        ten_most_criticized = (sorted(movie_critics, reverse=True)[:10])
-        for mov in ten_most_criticized:
-            m_indexes.append(m.index(str(mov)))
-            print(mov)
-        for mi in m_indexes:
-            print(self.c_movies['movie_title'][mi])
+        movie_critics = [(int(movie[2]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                         if movie[2] != '' and movie[2] != 'num_critic_for_reviews']
+        # movie_critics = sorted(movie_critics, key=lambda x: x[0], reverse=True)[:10]
+        #  lambda not necessary since it sorts for the first element of the tuple
+        movie_critics = sorted(set(movie_critics), reverse=True)[:10]
+        for m in movie_critics:
+            print(m[1])
 
     def test_20_longest_movies(self):
-        print(self.film_matrix[1])
+        movie_durations = [(int(movie[3]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                           if movie[3] != '' and movie[3] != 'duration']
+        movie_durations = sorted(set(movie_durations), reverse=True)[:20]
+        for m in movie_durations:
+            print(m[1])
 
+    def test_5_grossed_most_movies(self):
+        movie_gross = [(int(movie[8]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                       if movie[8] != '' and movie[8] != 'gross']
+        movie_gross = sorted(set(movie_gross), reverse=True)[:5]
+        for m in movie_gross:
+            print(m[1])
+
+    def test_5_grossed_less_movies(self):
+        movie_gross = [(int(movie[8]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                       if movie[8] != '' and movie[8] != 'gross']
+        movie_gross = sorted(set(movie_gross))[:5]
+        for m in movie_gross:
+            print(m[1])
+
+    def test_3_most_expensive_movies(self):
+        movie_budget = [(int(movie[22]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                        if movie[22] != '' and movie[22] != 'budget']
+        movie_budget = sorted(set(movie_budget), reverse=True)[:3]
+        for m in movie_budget:
+            print(m[1])
+
+    def test_3_less_expensive_movies(self):
+        movie_budget = [(int(movie[22]), movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                        if movie[22] != '' and movie[22] != 'budget']
+        movie_budget = sorted(set(movie_budget))[:3]
+        for m in movie_budget:
+            print(m[1])
 
 if __name__ == 'main':
     unittest.main()
