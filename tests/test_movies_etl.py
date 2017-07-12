@@ -70,5 +70,13 @@ class TestMoviesEtl(unittest.TestCase):
         for m in movie_budget:
             print(m[1])
 
+    def test_year_with_most_movies(self):
+        ys = [year[23] for year in self.film_matrix if year[23] != '' and year[23] != 'title_year']
+        print(max(set(ys), key=ys.count))
+
+    def test_year_with_less_movies(self):
+        ys = [year[23] for year in self.film_matrix if year[23] != '' and year[23] != 'title_year']
+        print(min(set(ys), key=ys.count))
+
 if __name__ == 'main':
     unittest.main()
