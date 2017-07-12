@@ -78,5 +78,17 @@ class TestMoviesEtl(unittest.TestCase):
         ys = [year[23] for year in self.film_matrix if year[23] != '' and year[23] != 'title_year']
         print(min(set(ys), key=ys.count))
 
+    def test_actors_ranking(self):
+        all_2_actors = [(movie[6], movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                        if movie[6] != '' and movie[6] != 'actor_2_name']
+        all_1_actors = [(movie[10], movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                        if movie[10] != '' and movie[10] != 'actor_1_name']
+        all_3_actors = [(movie[14], movie[11].replace('\xa0', '')) for movie in self.film_matrix
+                        if movie[14] != '' and movie[14] != 'actor_3_name']
+        all = all_1_actors + all_2_actors + all_3_actors
+        for a in all:
+            if a[0] == 'Christian Bale':
+                print(a)
+
 if __name__ == 'main':
     unittest.main()
