@@ -67,7 +67,7 @@ class FileHandler(object):
     def get_data_matrix(self, _dataset):
         spamreader = csv.reader(_dataset, delimiter=',')
         list_of_list = []
-        data = list(list(rec) for rec in spamreader)  # reads csv into a list of lists
+        data = list(list(rec) for rec in spamreader) # reads csv into a list of lists
         for row in data:
             list_of_list.append(list(row))
         return list_of_list
