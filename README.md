@@ -3,7 +3,8 @@ Repositorio para ejercicios del training de Python
 
 ###ETL
 
-Procesando el archivo con datos de 5000 películas extraídas de IMDB, contestar las preguntas o consultas que aparecen más abajo. Mostrar los resultados obtenidos en un documento HTML(simple). Adicionalmente, agregar el tiempo que toma el procesar los datos para lograr los requerimientos.
+Procesando el archivo con datos de 5000 películas extraídas de IMDB, contestar las preguntas o consultas que aparecen más abajo. Mostrar los resultados obtenidos en un documento HTML(simple). 
+Adicionalmente, agregar el tiempo que toma el procesar los datos para lograr los requerimientos.
 
 - ¿Cuantas peliculas a "color" y "blanco y negro" hay en la lista?
 - ¿Cuantas películas produjeron cada director?

@@ -2,6 +2,7 @@
 
 import unittest
 import os
+import scripts.mcons as mcons
 
 from scripts.movies_etl import MoviesEtl
 
@@ -15,7 +16,7 @@ class TestMoviesEtl(unittest.TestCase):
     film_matrix = m.matrix_movies(_dataset)
 
     def test_color_nocolor_movies(self):
-        bwc_films = [film[0] for film in self.film_matrix if film[0] != '' and film[0] != 'color']
+        bwc_films = [film[mcons.color] for film in self.film_matrix if film[mcons.color] != '']
         print('Colored films: ' + str(bwc_films.count('Color')))
         print('Black and White films: ' + str(bwc_films.count(' Black and White')))
 
