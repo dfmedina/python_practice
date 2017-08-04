@@ -1,4 +1,4 @@
-import os
+import os, html
 
 from scripts.movies_etl import MoviesEtl
 
