@@ -12,6 +12,10 @@ class MoviesEtl(object):
     def get_list_context(context, elements):
         return [elem[context] for elem in elements if elem[context] != '']
 
+    def join_columns(self, context, elements):
+        pass
+
+
     @staticmethod
     def get_pairs_context(context1, context2, elements):
         # TODO: cast outside the function
