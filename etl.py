@@ -7,8 +7,10 @@ _dataset = os.path.join(_dir, '..\\dataset\\movie_metadata.csv')
 
 
 def main_process():
-    m = MoviesEtl()
-    film_matrix = m.matrix_movies(_dataset)
+    m = MoviesEtl(_dataset)
+    film_matrix = m.matrix_movies()
+    # generate 
+
 
 
 if __name__ == '__main__':

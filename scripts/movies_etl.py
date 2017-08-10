@@ -5,25 +5,40 @@ import scripts.mcons as mcons
 
 class MoviesEtl(object):
 
-    def __init__(self):
-        pass
+    def __init__(self, _dataset):
+        self.dataset = _dataset
 
     @staticmethod
-    def get_list_context(context, elements):
+    def _matrix_height(matrix):
+        return len(matrix)
+
+    @staticmethod
+    def _matrix_width(matrix):
+        return len(matrix[0])
+
+    def matrix_movies(self):
+        fh = FileHandler()
+        doc_data = fh.get_doc_data(self.dataset)
+        #return self.clean_dataset(fh.get_data_matrix(doc_data))
+        return fh.get_data_matrix(doc_data)
+
+    def get_top_n_movies(self, cond, n, m_list, order=True):
+        r_dic = {}
+        in_list = sorted(self.get_pairs_context(cond, mcons.movie_title, m_list),
+                         reverse=order)[:n]
+        for elem in in_list:
+            r_dic[elem[1]] = elem[0]
+        return r_dic
+
+    def get_list_context(self, context, elements):
         return [elem[context] for elem in elements if elem[context] != '']
 
-    def join_columns(self, context, elements):
-        pass
-
-
-    @staticmethod
-    def get_pairs_context(context1, context2, elements):
+    def get_pairs_context(self, context1, context2, elements):
         # TODO: cast outside the function
         return [(int(movie[context1]), movie[context2].replace('\xa0', '')) for movie in elements
                 if movie[context1] != '' and movie[context2] != '']
 
-    @staticmethod
-    def get_pairs_actor(context1, context2, number, elements):
+    def get_pairs_actor(self, context1, context2, number, elements):
         return [(movie[context1], movie[context2].replace('\xa0', ''), number) for movie in elements
                 if movie[context1] != '' and movie[context2] != '']
 
@@ -33,19 +48,6 @@ class MoviesEtl(object):
         all_actors.extend(self.get_pairs_actor(mcons.actor_2_name, mcons.movie_title, 2, elements))
         all_actors.extend(self.get_pairs_actor(mcons.actor_3_name, mcons.movie_title, 3, elements))
         return set(all_actors)
-
-    @staticmethod
-    def matrix_movies(_dataset):
-        fh = FileHandler()
-        return fh.get_data_matrix(fh.get_doc_data(_dataset))
-
-    def get_top_n_movies(self, cond, n, m_list, order=True):
-        r_dic = {}
-        in_list = sorted(self.get_pairs_context(cond, mcons.movie_title, m_list),
-                         reverse=order)[:n]
-        for elem in in_list:
-            r_dic[elem[1]] = elem[0]
-        return r_dic
 
     def get_color_nocolor_movies(self, films):
         # TODO: validate different strings (color, COLOR, etc.)
