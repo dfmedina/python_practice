@@ -209,3 +209,15 @@ class MoviesEtl(object):
                         pass
             gen_likes.append((gen, likes))
         return sorted(gen_likes, key=lambda x: x[1], reverse=True)[:1]
+
+    def generate_tag_cloud(self):
+        tags_counts = []
+        tags = []
+        for movie in self.movies:
+            for tag in movie[mcons.plot_keywords].split('|'):
+                tags.append(tag)
+        all_tags = set(tags)
+        for t in all_tags:
+            if t != '':
+                tags_counts.append((t, tags.count(t)))
+        return sorted(tags_counts, key=lambda x: x[1], reverse=True)

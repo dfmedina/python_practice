@@ -101,16 +101,7 @@ class TestMoviesEtl(unittest.TestCase):
         print(self.m.get_actor_ranking_by_movies())
 
     def test_12_tag_cloud(self):
-        tags_counts = []
-        tags = []
-        for movie in self.film_matrix:
-            for tag in movie[mcons.plot_keywords].split('|'):
-                tags.append(tag)
-        all_tags = set(tags)
-        for t in all_tags:
-            if t != '':
-                tags_counts.append((t, tags.count(t)))
-        print(sorted(tags_counts, key=lambda x: x[1], reverse=True))
+        print(self.m.generate_tag_cloud())
 
     def test_13_get_genres(self):
         grossed_most = True
