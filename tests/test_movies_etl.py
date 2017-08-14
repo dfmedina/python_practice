@@ -113,19 +113,18 @@ class TestMoviesEtl(unittest.TestCase):
         print(sorted(tags_counts, key=lambda x: x[1], reverse=True))
 
     def test_13_get_genres(self):
-        all_genres = []
-        for movie in self.film_matrix:
-            if movie[mcons.genres] != '' and movie[mcons.title_year] != '' and movie[mcons.gross] != '':
-                all_genres.extend((movie[mcons.genres].split('|'), movie[mcons.title_year], movie[mcons.gross]))
+        grossed_most = True
+        print(self.m.get_grossed_genre_per_year(grossed_most))
 
     def test_14_genre_less_profits(self):
-        pass
+        grossed_less = False
+        print(self.m.get_grossed_genre_per_year(grossed_less))
 
     def test_15_actor_ranking_by_movies_and_influence(self):
         print(self.m.get_actor_ranking_by_movies_and_influence())
 
     def test_16_genre_most_liked(self):
-        pass
+        print(self.m.get_most_liked_genre())
 
     def test_17_top_3_directors_best_reputation(self):
         print(self.m.get_top_3_directors_reputation())

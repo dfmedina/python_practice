@@ -171,3 +171,41 @@ class MoviesEtl(object):
     def get_top_3_directors_reputation(self):
         return sorted(self.get_all_directors_reputation(), key=lambda x: x[1], reverse=True)[:3]
 
+    def get_movie_genres(self):
+        all_genres = []
+        for movie in self.get_column(mcons.genres):
+            all_genres.extend(movie.split('|'))
+        return list(set(all_genres))
+
+    def get_movie_years(self):
+        return list(set(self.get_column(mcons.title_year)))
+
+    def get_grossed_genre_per_year(self, order):
+        gen_year_gross = []
+        for year in self.get_movie_years():
+            gen_year = []
+            for gen in self.get_movie_genres():
+                total_gross = 0
+                for movie in self.movies:
+                    if movie[mcons.title_year] == year and gen in movie[mcons.genres]:
+                        try:
+                            total_gross += movie[mcons.gross]
+                        except TypeError:
+                            pass
+                gen_year.append((gen, total_gross))
+            gg = sorted(gen_year, key=lambda x: x[1], reverse=order)[:1]
+            gen_year_gross.append((year, gg[0][0]))
+        return gen_year_gross
+
+    def get_most_liked_genre(self):
+        gen_likes = []
+        for gen in self.get_movie_genres():
+            likes = 0
+            for movie in self.movies:
+                if gen in movie[mcons.genres]:
+                    try:
+                        likes += movie[mcons.movie_facebook_likes]
+                    except TypeError:
+                        pass
+            gen_likes.append((gen, likes))
+        return sorted(gen_likes, key=lambda x: x[1], reverse=True)[:1]
