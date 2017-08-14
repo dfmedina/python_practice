@@ -8,12 +8,10 @@ _dataset = os.path.join(_dir, '..\\dataset\\movie_metadata.csv')
 
 def main_process():
     m = MoviesEtl(_dataset)
-    film_matrix = m.matrix_movies()
-    # todo: load csv in list of lists : check
-    # todo: get header dict and remove header from list of lists
-    # todo: clean and cast to int or numeric: check
-    # todo: implement the calculation of execution time
-
+    film_matrix = m.movies
+    m.get_color_nocolor_movies()
+    m.get_count_movies_per_director()
+    m.get_top_10_movies()
 
 
 

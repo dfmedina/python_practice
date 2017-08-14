@@ -21,6 +21,10 @@ class FileHandler(object):
     def get_doc_data(_dataset):
         return open(_dataset, 'r', encoding="utf8")
 
+    @staticmethod
+    def get_html_template(html_file):
+        pass
+
     def get_data_matrix(self, _dataset):
         c_reader = csv.reader(_dataset, delimiter=',')
         next(c_reader, None)  # csv has header

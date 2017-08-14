@@ -1,5 +1,4 @@
 # encoding=utf8
-import numpy
 
 import lib.mcons as mcons
 from lib.file_handler import FileHandler
@@ -18,7 +17,7 @@ class MoviesEtl(object):
         self.matrix_width = fh.matrix_width(matrix)
         self.movies = matrix
 
-    def get_top_n_movies(self, cond, n, order=True, movies = None):
+    def get_top_n_movies(self, cond, n, order=True, movies=None):
         if movies is None:
             movies = self.movies
         r_dic = {}
@@ -31,10 +30,6 @@ class MoviesEtl(object):
 
     def get_column(self, column_name):
         return [elem[column_name] for elem in self.movies if elem[column_name] != '']
-
-    def get_args(self, *args):
-        for arg in args:
-            print(arg)
 
     def get_columns(self, *args):
         merged_columns = []
@@ -59,12 +54,12 @@ class MoviesEtl(object):
 
     def get_actor_best_movie(self, actor_movies):
         best_movies = list(self.get_top_n_movies(mcons.num_critic_for_reviews, 1, movies=actor_movies).keys())
-        if len(best_movies) == 1:
+        if len(best_movies) >= 1:
             return best_movies[0]
 
-    def get_actor_influence(self, actor_name, elements):
+    def get_actor_influence(self, actor_name, actor_movies):
         influence = 0
-        for movie in elements:
+        for movie in actor_movies:
             if movie[mcons.actor_1_name] == actor_name:
                 influence += movie[mcons.actor_1_facebook_likes]
             if movie[mcons.actor_2_name] == actor_name:
@@ -87,7 +82,6 @@ class MoviesEtl(object):
                                   self.get_actor_best_movie(actor_movies)
                                   ))
         return actor_ranking
-        # actor_ranking = sorted(actor_ranking, key=lambda x: x[1], reverse=True)
 
     def get_actor_ranking_by_movies(self):
         return sorted(self.get_actors_ranking(), key=lambda x: x[1], reverse=True)
@@ -107,7 +101,7 @@ class MoviesEtl(object):
     def get_movies_per_director(self):
         dir_movies = dict()
         ds = self.get_pairs_context(mcons.director_name, mcons.movie_title)
-        directors = set([x[0] for x in ds])  # user get directors
+        directors = self.get_directors()
         for dire in directors:
             for movie in ds:
                 if movie[0] == dire:
