@@ -4,4 +4,5 @@ class QueryTime(object):
         pass
 
     def get_query_time(self, query):
+
         pass

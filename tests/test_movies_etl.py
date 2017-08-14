@@ -4,6 +4,7 @@ import os
 import lib.mcons as mcons
 import logging
 import sys
+import array
 
 from lib.movies_etl import (MoviesEtl, FileHandler)
 
@@ -78,21 +79,21 @@ class TestMoviesEtl(unittest.TestCase):
 
     def test_6_top_5_grossed_less_movies(self):
         c = 0
-        movies = self.m.get_5_grossed_less_movies()
+        movies = self.m.get_top_5_grossed_less_movies()
         for m in movies:
             c += 1
             logging.getLogger().debug(c, '-', m, movies[m])
 
     def test_7_top_3_most_expensive_movies(self):
         c = 0
-        movies = self.m.get_3_most_expensive_movies()
+        movies = self.m.get_top_3_most_expensive_movies()
         for m in movies:
             c += 1
             logging.getLogger().debug(c, '-', m, movies[m])
 
     def test_8_top_3_less_expensive_movies(self):
         c = 0
-        movies = self.m.get_3_less_expensive_movies()
+        movies = self.m.get_top_3_less_expensive_movies()
         for m in movies:
             c += 1
             logging.getLogger().debug(c, '-', m, movies[m])
@@ -125,6 +126,10 @@ class TestMoviesEtl(unittest.TestCase):
 
     def test_17_top_3_directors_best_reputation(self):
         logging.getLogger().debug(self.m.get_top_3_directors_reputation())
+
+    def test_decode(self):
+        stacktrace = ""
+        logging.getLogger().debug((array.array('B', stacktrace).tostring()))
 
 
 if __name__ == 'main':

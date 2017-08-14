@@ -127,13 +127,13 @@ class MoviesEtl(object):
     def get_top_5_grossed_most_movies(self):
         return self.get_top_n_movies(mcons.gross, 5)
 
-    def get_5_grossed_less_movies(self):
+    def get_top_5_grossed_less_movies(self):
         return self.get_top_n_movies(mcons.gross, 5, order=False)
 
-    def get_3_most_expensive_movies(self):
+    def get_top_3_most_expensive_movies(self):
         return self.get_top_n_movies(mcons.budget, 3)
 
-    def get_3_less_expensive_movies(self):
+    def get_top_3_less_expensive_movies(self):
         return self.get_top_n_movies(mcons.budget, 3, order=False)
 
     def get_year_with_most_movies(self):
