@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<title>Movies ETL</title>
+	<link rel="stylesheet" type="text/css" href="template.css">
+	</head>
+	<body>
+		<div class="container" align="center">
+			<!-- Top Navigation -->
+			<header>
+				<h1>Movies ETL
+					<span>Queries through movies dataset</span>
+				</h1>
+			</header>
+			<div class="component">
+				<h3> 1 - Cuantas peliculas a "color" y "blanco y negro" hay en la lista</h3>
+				<table>
+					<thead>
+						<tr>
+							<th>Black and white</th>
+							<th>Color</th>
+						</tr>
+					</thead>
+					<tbody>
+							<tr>
+								<td class="bw_movies">$bw_movies</td>
+								<td class="c_movies" >$c_movies</td>
+							</tr>
+					</tbody>
+				</table>
+				<p class="filler"></p>
+			</div>
+            <div class="director_movies">
+				<h3> 2 - Cuantas peliculas produjo cada director?</h3>
+				<table>
+					<thead>
+						<tr>
+							<th width="30%">Director</th>
+							<th width="30%">Movies</th>
+						</tr>
+					</thead>
+					<tbody>
+                    {% for directors in director_movies %}
+							<tr>
+								<td class="director_name">$bw_movies</td>
+								<td class="director_movies" >$c_movies</td>
+							</tr>
+                    {% endfor %}
+					</tbody>
+				</table>
+				<p class="filler"></p>
+			</div>
+            <div class="director_movies">
+				<h3> 2 - Cuantas peliculas produjo cada director?</h3>
+				<table>
+					<thead>
+						<tr>
+							<th width="30%">Director</th>
+							<th width="30%">Movies</th>
+						</tr>
+					</thead>
+					<tbody>
+                    {% for directors in director_movies %}
+							<tr>
+								<td class="director_name">$bw_movies</td>
+								<td class="director_movies" >$c_movies</td>
+							</tr>
+                    {% endfor %}
+					</tbody>
+				</table>
+				<p class="filler"></p>
+			</div>
+			<section class="related">
+				<!--
+				<p>If you have any question please contact: </br> cristian.perez@tripwire.com </br> diego.medina@tripwire.com</p>
+				-->
+			</section>
+		</div><!-- /container -->
+	</body>
+</html>

@@ -112,10 +112,10 @@ class MoviesEtl(object):
         return dir_movies
 
     def get_count_movies_per_director(self):
-        count_movies_director = {}
+        count_movies_director = []
         mpd = self.get_movies_per_director()
         for director in mpd:
-            count_movies_director[director] = len(mpd[director])
+            count_movies_director.append((director, len(mpd[director])))
         return count_movies_director
 
     def get_top_10_movies(self):
@@ -190,6 +190,12 @@ class MoviesEtl(object):
             gg = sorted(gen_year, key=lambda x: x[1], reverse=order)[:1]
             gen_year_gross.append((year, gg[0][0]))
         return gen_year_gross
+
+    def get_genre_grossed_most_per_year(self):
+        return self.get_grossed_genre_per_year(True)
+
+    def get_genre_grossed_less_per_year(self):
+        return self.get_grossed_genre_per_year(False)
 
     def get_most_liked_genre(self):
         gen_likes = []
