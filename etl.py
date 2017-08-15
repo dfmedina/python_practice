@@ -33,17 +33,17 @@ def main_process(output):
 
     # Movies per director
     mpd_query_result, mpd_elapsed = timer.get_query_time(m.get_count_movies_per_director)
-    html_mpd_result = HtmlGenerator().two_columns_table(["director, movies"], mpd_query_result, mpd_elapsed)
+    html_mpd_result = HtmlGenerator().two_columns_table(["Director, Movies"], mpd_query_result, mpd_elapsed)
     print(html_mpd_result)
 
     # Top 10 movies
     t10_query_result, t10_elapsed = timer.get_query_time(m.get_top_10_movies)
-    t10_result = HtmlGenerator().two_columns_table(["movies", "facebook_likes"], t10_query_result, t10_elapsed)
+    t10_result = HtmlGenerator().two_columns_table(["Movie", "Facebook_likes"], t10_query_result, t10_elapsed)
     print(t10_result)
 
     # Top 20 longest movies
     t20_query_result, t20_elapsed = timer.get_query_time(m.get_top_20_longest_movies)
-    t20_result = HtmlGenerator().two_columns_table(["movies", "duration"], t20_query_result, t20_elapsed)
+    t20_result = HtmlGenerator().two_columns_table(["Movies", "Duration"], t20_query_result, t20_elapsed)
     print(t20_result)
 
     '''
