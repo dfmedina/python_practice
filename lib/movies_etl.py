@@ -116,7 +116,7 @@ class MoviesEtl(object):
         mpd = self.get_movies_per_director()
         for director in mpd:
             count_movies_director.append((director, len(mpd[director])))
-        return count_movies_director
+        return sorted(count_movies_director, key=lambda x: x[1], reverse=True)[:10]
 
     def get_top_10_movies(self):
         return self.get_top_n_movies(mcons.num_critic_for_reviews, 10)
