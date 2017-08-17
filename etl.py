@@ -9,7 +9,7 @@ from lib.output_generator import HtmlGenerator
 from lib.query_time import QueryTime as timer
 
 _dir = os.path.dirname(__file__)
-_dataset = os.path.join(_dir, 'dataset\\movie_metadata.csv')
+##_dataset = os.path.join(_dir, 'dataset\\movie_metadata.csv')
 _template = os.path.join(_dir, 'template.html')
 
 
@@ -19,10 +19,12 @@ stream_handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(stream_handler)
 
 
-def main_process(output):
+def main_process(output, in_file):
     # TODO: add other types of outputs
+    _dataset = os.path.join(_dir, in_file)
     if output == 'html':
         pass
+    logging.getLogger().debug(in_file)
     logging.getLogger().debug('Begin processing')
     m = MoviesEtl(_dataset)
 
@@ -32,18 +34,18 @@ def main_process(output):
     print(html_bwc_result)
 
     # Movies per director
-    mpd_query_result, mpd_elapsed = timer.get_query_time(m.get_count_movies_per_director)
-    html_mpd_result = HtmlGenerator().two_columns_table(["Director, Movies"], mpd_query_result, mpd_elapsed)
-    print(html_mpd_result)
+    #mpd_query_result, mpd_elapsed = timer.get_query_time(m.get_count_movies_per_director)
+    #html_mpd_result = HtmlGenerator().list_to_table(["Director", "Movies"], mpd_query_result, mpd_elapsed)
+    #print(html_mpd_result)
 
     # Top 10 movies
     t10_query_result, t10_elapsed = timer.get_query_time(m.get_top_10_movies)
-    t10_result = HtmlGenerator().two_columns_table(["Movie", "Facebook_likes"], t10_query_result, t10_elapsed)
+    t10_result = HtmlGenerator().list_to_table(["Movie", "Facebook_likes"], t10_query_result, t10_elapsed)
     print(t10_result)
 
     # Top 20 longest movies
     t20_query_result, t20_elapsed = timer.get_query_time(m.get_top_20_longest_movies)
-    t20_result = HtmlGenerator().two_columns_table(["Movies", "Duration"], t20_query_result, t20_elapsed)
+    t20_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t20_query_result, t20_elapsed)
     print(t20_result)
 
     '''
@@ -69,13 +71,14 @@ if __name__ == '__main__':
 
     parser = optparse.OptionParser()
 
+    parser.add_option('-f', '--file', action="store", dest="in_file", help="input csv movies file")
     parser.add_option('-o', '--output',
                       action="store", dest="output",
                       help="output format definition", default="html")
 
     options, args = parser.parse_args()
 
-    main_process(options.output)
+    main_process(options.output, options.in_file)
 
 
 

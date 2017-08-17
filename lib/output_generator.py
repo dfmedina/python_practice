@@ -29,7 +29,7 @@ class HtmlGenerator(object):
         return "<a> Color movies: {0}, Black and White movies: {1} -- elapsed time: {2}  seconds</a>"\
             .format(str(tup[0]), str(tup[1]), elapsed)
 
-    def two_columns_table(self, columns, query_result, elapsed):
+    def list_to_table(self, columns, query_result, elapsed):
         header_string = '<table><tr>'
         for item in columns:
             header_string += "<td>"+item+"</td>"
