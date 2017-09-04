@@ -214,8 +214,7 @@ class MoviesEtl(object):
         tags_counts = []
         tags = []
         for movie in self.movies:
-            for tag in movie[mcons.plot_keywords].split('|'):
-                tags.append(tag)
+            [tags.append(tag)for tag in movie[mcons.plot_keywords].split('|')]
         all_tags = set(tags)
         for t in all_tags:
             if t != '':

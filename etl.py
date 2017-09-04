@@ -9,9 +9,10 @@ from lib.output_generator import HtmlGenerator
 from lib.query_time import QueryTime as timer
 
 _dir = os.path.dirname(__file__)
-##_dataset = os.path.join(_dir, 'dataset\\movie_metadata.csv')
-_template = os.path.join(_dir, 'template.html')
-
+_template = os.path.join(_dir, 'template\\template.html')
+_directors = os.path.join(_dir, 'template\\movies_per_director.html')
+_output = os.path.join(_dir, 'output\\output.html')
+_output_d = os.path.join(_dir, 'output\\d_output.html')
 
 logger = logging.getLogger()
 logger.level = logging.DEBUG
@@ -22,17 +23,52 @@ logger.addHandler(stream_handler)
 def main_process(output, in_file):
     # TODO: add other types of outputs
     _dataset = os.path.join(_dir, in_file)
-    if output == 'html':
-        pass
+    queries_result = []
     logging.getLogger().debug(in_file)
-    logging.getLogger().debug('Begin processing')
+    logger.debug('Begin processing')
+    html_table = ''
     m = MoviesEtl(_dataset)
 
-    # Black and White / Color - total movies
     bwc_query_result, bwc_elapsed = timer.get_query_time(m.get_color_nocolor_movies)
     html_bwc_result = HtmlGenerator().color_movies(bwc_query_result, bwc_elapsed)
-    print(html_bwc_result)
 
+    mpd_query_result, mpd_elapsed = timer.get_query_time(m.get_count_movies_per_director)
+    html_mpd_result = HtmlGenerator().list_to_table(["Director", "Movies"], mpd_query_result, mpd_elapsed)
+
+    t10_query_result, t10_elapsed = timer.get_query_time(m.get_top_10_movies)
+    t10_result = HtmlGenerator().list_to_table(["Movie", "Facebook_likes"], t10_query_result, t10_elapsed)
+
+    t20_query_result, t20_elapsed = timer.get_query_time(m.get_top_20_longest_movies)
+    t20_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t20_query_result, t20_elapsed)
+
+    if output == 'html':
+        fd = open(_directors, 'r')
+        filedata_d = fd.read()
+        fd.close()
+
+        html_directors = filedata_d.replace("${movie_per_director}", html_mpd_result)
+
+        fod = open(_output_d, 'w')
+        fod.write(html_directors)
+        fod.close()
+
+        fi = open(_template, 'r')
+        filedata = fi.read()
+        fi.close()
+
+        html_total = filedata.replace("${bwc_movies}", html_bwc_result)
+        # html_total = html_total.replace("${movie_per_director}", html_mpd_result)
+        html_total = html_total.replace("${top_10_movies}", t10_result)
+        html_total = html_total.replace("${top_20_longest_movies}", t20_result)
+
+        fo = open(_output, 'w')
+        fo.write(html_total)
+        fo.close()
+    logger.debug('End processing')
+
+    # Black and White / Color - total movies
+
+    '''
     # Movies per director
     #mpd_query_result, mpd_elapsed = timer.get_query_time(m.get_count_movies_per_director)
     #html_mpd_result = HtmlGenerator().list_to_table(["Director", "Movies"], mpd_query_result, mpd_elapsed)
@@ -41,14 +77,29 @@ def main_process(output, in_file):
     # Top 10 movies
     t10_query_result, t10_elapsed = timer.get_query_time(m.get_top_10_movies)
     t10_result = HtmlGenerator().list_to_table(["Movie", "Facebook_likes"], t10_query_result, t10_elapsed)
-    print(t10_result)
+    logger.debug(t10_result)
 
     # Top 20 longest movies
     t20_query_result, t20_elapsed = timer.get_query_time(m.get_top_20_longest_movies)
     t20_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t20_query_result, t20_elapsed)
-    print(t20_result)
+    logger.debug(t20_result)
 
-    '''
+    # Top 5 movies that grossed more
+    t5_gross_query_result, t5_gross_elapsed = timer.get_query_time(m.get_top_5_grossed_most_movies)
+    t5_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t5_gross_query_result, t5_gross_elapsed)
+    logger.debug(t5_result)
+
+    # TOP 5 movies grossed less
+    t5_gross_query_result, t5_gross_elapsed = timer.get_query_time(m.get_top_5_grossed_less_movies)
+    t5_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t5_gross_query_result, t5_gross_elapsed)
+    logger.debug(t5_result)
+
+    # TOP 3 most expensive movies
+    t3_exp_query_result, t3_exp_elapsed = timer.get_query_time(m.get_top_3_most_expensive_movies)
+    t3_exp_result = HtmlGenerator().list_to_table(["Movies", "Duration"], t3_exp_query_result, t3_exp_elapsed)
+    logger.debug(t3_exp_result)
+
+
     logging.getLogger().debug(timer.get_query_time(m.get_color_nocolor_movies))
     logging.getLogger().debug(timer.get_query_time(m.get_count_movies_per_director))
     logging.getLogger().debug(timer.get_query_time(m.get_top_10_movies))
@@ -71,13 +122,12 @@ if __name__ == '__main__':
 
     parser = optparse.OptionParser()
 
-    parser.add_option('-f', '--file', action="store", dest="in_file", help="input csv movies file")
-    parser.add_option('-o', '--output',
-                      action="store", dest="output",
+    parser.add_option('-f', '--file', action="store", dest="in_file",
+                      help="input csv movies file", default="dataset/movie_metadata.csv")
+    parser.add_option('-o', '--output', action="store", dest="output",
                       help="output format definition", default="html")
 
     options, args = parser.parse_args()
-
     main_process(options.output, options.in_file)
 
 
