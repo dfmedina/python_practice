@@ -24,14 +24,14 @@ class TestMoviesEtl(unittest.TestCase):
 
     def test_eval(self):
         l = ['Color', 'James Cameron', '723', '17.8', '-1', '-5.3']
-        logging.getLogger().debug([FileHandler.cast(val) for val in l])
+        logging.getLogger().debug(str([FileHandler.cast(val) for val in l]))
 
     def test_not_duplicates_movie_titles(self):
         all_movie_titles = self.m.get_column(mcons.movie_title)
         for movie in all_movie_titles:
             count = all_movie_titles.count(movie)
-            if count > 1:
-                logging.getLogger().debug((movie, count))
+            if not count:
+                logging.getLogger().debug(str(movie, count))
 
     def test_movies_loaded(self):
         logging.getLogger().debug(self.film_matrix[0])
@@ -46,12 +46,14 @@ class TestMoviesEtl(unittest.TestCase):
         for movie in self.film_matrix:
             if movie[mcons.movie_title] == 'Casino Royale':
                 result.append(movie)
-        logging.getLogger().debug(result)
+        logging.getLogger().debug(str(result))
 
     def test_1_color_nocolor_movies(self):
-        c, bw = self.m.get_color_nocolor_movies()
-        logging.getLogger().debug('Colored films:', c)
-        logging.getLogger().debug('Black and White films:', bw)
+        colors = self.m.get_color_nocolor_movies()
+        colored = colors[0][0]
+        black_white = colors[0][1]
+        logging.getLogger().debug('Colored films: ' + str(colored))
+        logging.getLogger().debug('Black and White films: ' + str(black_white))
 
     def test_2_amount_movies_per_director(self):
         logging.getLogger().debug(self.m.get_count_movies_per_director())
@@ -110,6 +112,24 @@ class TestMoviesEtl(unittest.TestCase):
     def test_12_tag_cloud(self):
         logging.getLogger().debug(self.m.generate_tag_cloud())
 
+    def test_genres(self):
+        gen_year_gross = []
+        for year in self.m.get_movie_years():
+            movies_of_year = self.m.get_movies_of_year(year)
+            gen_year = []
+            for gen in self.m.get_movie_genres(movies_of_year):
+                total_gross = 0
+                for movie in self.m.movies:
+                    try:
+                        total_gross += movie[mcons.gross]
+                    except TypeError:
+                        pass
+                gen_year.append((gen, total_gross))
+            self.logger.debug(gen_year)
+            #gg = sorted(gen_year, key=lambda x: x[1], reverse=True)[:1]
+            #gen_year_gross.append((year, gg[0][0]))
+        #self.logger.debug(gen_year_gross)
+
     def test_13_get_genres(self):
         grossed_most = True
         logging.getLogger().debug(self.m.get_grossed_genre_per_year(grossed_most))
@@ -128,7 +148,7 @@ class TestMoviesEtl(unittest.TestCase):
         logging.getLogger().debug(self.m.get_top_3_directors_reputation())
 
     def test_decode(self):
-        stacktrace = ""
+        stacktrace = [1, 2, 3, 4, 5]
         logging.getLogger().debug((array.array('B', stacktrace).tostring()))
 
 

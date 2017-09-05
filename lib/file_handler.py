@@ -10,14 +10,6 @@ class FileHandler(object):
         pass
 
     @staticmethod
-    def matrix_height(matrix):
-        return len(matrix)
-
-    @staticmethod
-    def matrix_width(matrix):
-        return len(matrix[0])
-
-    @staticmethod
     def get_doc_data(_dataset):
         return open(_dataset, 'r', encoding="utf8")
 

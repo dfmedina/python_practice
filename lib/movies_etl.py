@@ -7,17 +7,30 @@ from lib.file_handler import FileHandler
 class MoviesEtl(object):
 
     def __init__(self, _dataset):
-        self.dataset = _dataset
-
+        """
+        Constructor for MoviesEtl class. This constructor will generate
+        the movies matrix from a given csv file and make the matrix an attribute for the class 
+        
+        :param _dataset: csv file with movies information
+        """
         fh = FileHandler()
-        doc_data = FileHandler.get_doc_data(self.dataset)
+        doc_data = FileHandler.get_doc_data(_dataset)
         matrix = fh.get_data_matrix(doc_data)
-
-        self.matrix_height = fh.matrix_height(matrix)
-        self.matrix_width = fh.matrix_width(matrix)
+        self.matrix_height = len(matrix)
+        self.matrix_width = len(matrix[0])
         self.movies = matrix
 
     def get_top_n_movies(self, cond, n, order=True, movies=None):
+        """
+        Generate a dictionary of movies with a given condition as value.
+        cond: condition for the filter of the dataset
+        n: number to define the top list
+        order: value to define if the result will be ordered
+        movies: a sub-selection of a list can be passed to generate a top 
+
+        :rtype: top N dictionary with movie title as key and the given condition as value
+        ordered by value
+        """
         if movies is None:
             movies = self.movies
         r_dic = {}
@@ -29,7 +42,11 @@ class MoviesEtl(object):
         return r_dic
 
     def get_column(self, column_name):
-        return [elem[column_name] for elem in self.movies if elem[column_name] != '']
+        """
+        return a column of the matrix
+        :rtype: list for a given column
+        """
+        return [elem[column_name] for elem in self.movies if elem[column_name]]
 
     def get_columns(self, *args):
         merged_columns = []
@@ -41,7 +58,7 @@ class MoviesEtl(object):
         if movies is None:
             movies = self.movies
         return [(movie[context1], movie[context2]) for movie in movies
-                if movie[context1] != '' and movie[context2] != '']
+                if movie[context1] and movie[context2]]
 
     def get_actor_movies(self, actor_name):
         actor_movies = []
@@ -93,7 +110,7 @@ class MoviesEtl(object):
         c = 'Color'
         bw = ' Black and White'
         bwc_films = self.get_column(mcons.color)
-        return bwc_films.count(c), bwc_films.count(bw)
+        return [(bwc_films.count(c), bwc_films.count(bw))]
 
     def get_directors(self):
         return list(set(self.get_column(mcons.director_name)))
@@ -116,7 +133,7 @@ class MoviesEtl(object):
         mpd = self.get_movies_per_director()
         for director in mpd:
             count_movies_director.append((director, len(mpd[director])))
-        return sorted(count_movies_director, key=lambda x: x[1], reverse=True)[:10]
+        return sorted(count_movies_director, key=lambda x: x[1], reverse=True)
 
     def get_top_10_movies(self):
         return self.get_top_n_movies(mcons.num_critic_for_reviews, 10)
@@ -138,34 +155,46 @@ class MoviesEtl(object):
 
     def get_year_with_most_movies(self):
         ym = self.get_column(mcons.title_year)
-        return max(set(ym), key=ym.count)
+        max_year = max(set(ym), key=ym.count)
+        count = ym.count(max_year)
+        return [(max_year, count)]
 
     def get_year_with_less_movies(self):
         ym = self.get_column(mcons.title_year)
-        return min(set(ym), key=ym.count)
+        min_year = min(set(ym), key=ym.count)
+        count = ym.count(min_year)
+        return [(min_year, count)]
 
     def get_5_best_directors(self):
         self.get_movies_per_director()
 
+    def get_director_movies(self, director):
+        d_movies = []
+        for movie in self.movies:
+            if movie[mcons.director_name] == director:
+                d_movies.append(movie)
+        return d_movies
+
     def get_director_reputation(self, director):
         reputation = 0
-        for movie in self.movies:
-            if director == movie[mcons.director_name]:
-                reputation += movie[mcons.director_facebook_likes]
+        director_movies = self.get_director_movies(director)
+        for movie in director_movies:
+            reputation += movie[mcons.director_facebook_likes]
         return reputation
 
     def get_all_directors_reputation(self):
         director_rep = []
         directors = self.get_directors()
         for dire in directors:
-            reputation = self.get_director_reputation(dire)
-            director_rep.append((dire, reputation))
+            director_rep.append((dire, self.get_director_reputation(dire)))
         return director_rep
 
     def get_top_3_directors_reputation(self):
         return sorted(self.get_all_directors_reputation(), key=lambda x: x[1], reverse=True)[:3]
 
-    def get_movie_genres(self):
+    def get_movie_genres(self, movie=None):
+        if movie is None:
+            movie = self.movies
         all_genres = []
         for movie in self.get_column(mcons.genres):
             all_genres.extend(movie.split('|'))
@@ -214,10 +243,12 @@ class MoviesEtl(object):
         tags_counts = []
         tags = []
         for movie in self.movies:
-            for tag in movie[mcons.plot_keywords].split('|'):
-                tags.append(tag)
+            [tags.append(tag)for tag in movie[mcons.plot_keywords].split('|')]
         all_tags = set(tags)
         for t in all_tags:
-            if t != '':
+            if t:
                 tags_counts.append((t, tags.count(t)))
         return sorted(tags_counts, key=lambda x: x[1], reverse=True)
+
+    def get_movies_of_year(self, year):
+        return list(filter(lambda x: x[mcons.title_year] == year, self.movies))

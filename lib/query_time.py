@@ -7,8 +7,8 @@ class QueryTime(object):
         pass
 
     @staticmethod
-    def get_query_time(query):
+    def get_query_time(mov_query):
         t = time.time()
-        result = query()
+        result = mov_query()
         elapsed = time.time() - t
         return result, elapsed
