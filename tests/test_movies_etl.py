@@ -6,15 +6,17 @@ import logging
 import sys
 import array
 
+from lib.query_time import timed
+
 from lib.movies_etl import (MoviesEtl, FileHandler)
+
+logger = logging.getLogger()
+logger.level = logging.DEBUG
+stream_handler = logging.StreamHandler(sys.stdout)
+logger.addHandler(stream_handler)
 
 
 class TestMoviesEtl(unittest.TestCase):
-
-    logger = logging.getLogger()
-    logger.level = logging.DEBUG
-    stream_handler = logging.StreamHandler(sys.stdout)
-    logger.addHandler(stream_handler)
 
     _dir = os.path.dirname(__file__)
     _dataset = os.path.join(_dir, '..\\dataset\\movie_metadata.csv')
@@ -46,7 +48,7 @@ class TestMoviesEtl(unittest.TestCase):
         for movie in self.film_matrix:
             if movie[mcons.movie_title] == 'Casino Royale':
                 result.append(movie)
-        logging.getLogger().debug(str(result))
+        logger.debug(str(result))
 
     def test_1_color_nocolor_movies(self):
         colors = self.m.get_color_nocolor_movies()
@@ -106,29 +108,17 @@ class TestMoviesEtl(unittest.TestCase):
     def test_10_year_with_less_movies(self):
         logging.getLogger().debug(self.m.get_year_with_less_movies())
 
+    @timed
     def test_11_actor_ranking_by_movies(self):
         logging.getLogger().debug(self.m.get_actor_ranking_by_movies())
+        # logging.getLogger().debug(self.m.get_actors_ranking())
+        # result = list(filter(lambda movie: actor in (movie[mcons.actor_1_name],
+        # movie[mcons.actor_2_name], movie[mcons.actor_3_name]), self.film_matrix))
+        #for actor in self.m.get_actors():
+        #    self.m.get_actor_movies(actor)
 
     def test_12_tag_cloud(self):
         logging.getLogger().debug(self.m.generate_tag_cloud())
-
-    def test_genres(self):
-        gen_year_gross = []
-        for year in self.m.get_movie_years():
-            movies_of_year = self.m.get_movies_of_year(year)
-            gen_year = []
-            for gen in self.m.get_movie_genres(movies_of_year):
-                total_gross = 0
-                for movie in self.m.movies:
-                    try:
-                        total_gross += movie[mcons.gross]
-                    except TypeError:
-                        pass
-                gen_year.append((gen, total_gross))
-            self.logger.debug(gen_year)
-            #gg = sorted(gen_year, key=lambda x: x[1], reverse=True)[:1]
-            #gen_year_gross.append((year, gg[0][0]))
-        #self.logger.debug(gen_year_gross)
 
     def test_13_get_genres(self):
         grossed_most = True

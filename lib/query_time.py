@@ -1,4 +1,20 @@
-import time
+from functools import wraps
+from time import time
+import logging
+
+logger = logging.getLogger()
+logger.level = logging.DEBUG
+
+
+def timed(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        start = time()
+        result = f(*args, **kwds)
+        elapsed = time() - start
+        logger.debug("%s took %d seconds to finish" % (f.__name__, elapsed))
+        return result
+    return wrapper
 
 
 class QueryTime(object):
@@ -8,7 +24,7 @@ class QueryTime(object):
 
     @staticmethod
     def get_query_time(mov_query):
-        t = time.time()
+        t = time()
         result = mov_query()
-        elapsed = time.time() - t
+        elapsed = time() - t
         return result, elapsed

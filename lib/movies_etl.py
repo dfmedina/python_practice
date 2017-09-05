@@ -50,29 +50,26 @@ class MoviesEtl(object):
 
     def get_columns(self, *args):
         merged_columns = []
-        for c_name in args:
-            merged_columns.extend(self.get_column(c_name))
-        return merged_columns
+        return [merged_columns.extend(self.get_column(c_name)) for c_name in args]
 
     def get_pairs_context(self, context1, context2, movies=None):
         if movies is None:
             movies = self.movies
-        return [(movie[context1], movie[context2]) for movie in movies
-                if movie[context1] and movie[context2]]
+        return [(movie[context1], movie[context2]) for movie in movies if movie[context1] and movie[context2]]
 
     def get_actor_movies(self, actor_name):
         actor_movies = []
         for movie in self.movies:
-            if movie[mcons.actor_1_name] == actor_name \
-                    or movie[mcons.actor_2_name] == actor_name \
-                    or movie[mcons.actor_3_name] == actor_name:
+            if actor_name in (movie[mcons.actor_1_name], movie[mcons.actor_2_name], movie[mcons.actor_3_name]):
                 actor_movies.append(movie)
         return actor_movies
 
     def get_actor_best_movie(self, actor_movies):
         best_movies = list(self.get_top_n_movies(mcons.num_critic_for_reviews, 1, movies=actor_movies).keys())
-        if len(best_movies) >= 1:
+        try:
             return best_movies[0]
+        except IndexError:
+            return None
 
     def get_actor_influence(self, actor_name, actor_movies):
         influence = 0
@@ -192,9 +189,10 @@ class MoviesEtl(object):
     def get_top_3_directors_reputation(self):
         return sorted(self.get_all_directors_reputation(), key=lambda x: x[1], reverse=True)[:3]
 
-    def get_movie_genres(self, movie=None):
-        if movie is None:
-            movie = self.movies
+    def get_movie_genres(self, movies=None):
+        # TODO: include movies parameter to make the genre search easier
+        if movies is None:
+            movies = self.movies
         all_genres = []
         for movie in self.get_column(mcons.genres):
             all_genres.extend(movie.split('|'))
@@ -204,6 +202,7 @@ class MoviesEtl(object):
         return list(set(self.get_column(mcons.title_year)))
 
     def get_grossed_genre_per_year(self, order):
+        # TODO: fix complexity
         gen_year_gross = []
         for year in self.get_movie_years():
             gen_year = []

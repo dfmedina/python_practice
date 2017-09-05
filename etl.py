@@ -1,20 +1,19 @@
 import os
 import logging
 import sys
-import time
+import datetime
 import optparse
+
 
 from lib.movies_etl import MoviesEtl
 from lib.output_generator import HtmlGenerator
-from lib.query_time import QueryTime as Timer
+from lib.query_time import timed
 
 _dir = os.path.dirname(__file__)
-_template = os.path.join(_dir, 'template\\template.html')
-_lq_template = os.path.join(_dir, 'template\\large_queries_template.html')
+_template = os.path.join(_dir, 'template/template.html')
 
-_output = os.path.join(_dir, 'output\\output.html')
-# _output_d = os.path.join(_dir, 'output\\d_output.html')
-# _output_cloud = os.path.join(_dir, 'output\\cloud_output.html')
+_output = os.path.join(_dir, 'output/output.html')
+_output_d = os.path.join(_dir, 'output/d_output.html')
 
 logger = logging.getLogger()
 logger.level = logging.DEBUG
@@ -22,21 +21,23 @@ stream_handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(stream_handler)
 
 
+@timed
 def main_process(output, in_file):
     # TODO: add other types of outputs
     _dataset = os.path.join(_dir, in_file)
     logging.getLogger().debug(in_file)
-    logger.debug('Begin processing')
+    logger.debug('Begin processing at: {0}'.format(datetime.datetime.now()))
     m = MoviesEtl(_dataset)
 
-    # l_queries = [(m.get_count_movies_per_director, ["Director", "Movies"]), ()]
-
-    # logging.getLogger().debug(Timer.get_query_time(m.get_actor_ranking_by_movies))
-    # logging.getLogger().debug(Timer.get_query_time(m.generate_tag_cloud))
-    # ("Genre grossed most per year", m.get_genre_grossed_most_per_year, ["Year", "Genre"])
-    # ("Genre grossed least per year", m.get_genre_grossed_less_per_year, ["Year", "Genre"])
-
-    html_result = ''
+    long_queries = [("Tags Cloud", m.generate_tag_cloud, ["Tag", "Appearance"]),
+                    ("Movies per director", m.get_count_movies_per_director, ["Director", "Movies"]),
+                    ("Actors ranking by amount of movies", m.get_actor_ranking_by_movies, ["Actor", "Movies",
+                                                                                           "Influence", "Best Movie"]),
+                    ("Actors ranking by movies and popularity", m.get_actor_ranking_by_movies_and_influence,
+                     ["Actor", "Movies", "Influence", "Best Movie"]),
+                    ("Genre grossed most per year", m.get_genre_grossed_most_per_year, ["Year", "Genre"]),
+                    ("Genre grossed less per year", m.get_genre_grossed_less_per_year, ["Year", "Genre"])
+                    ]
 
     queries = [("Movies in Color - Black and White", m.get_color_nocolor_movies, ["Color Movies",
                                                                                   "Black and White movies"]),
@@ -52,13 +53,10 @@ def main_process(output, in_file):
                ("Top 3 directors with most reputation", m.get_top_3_directors_reputation, ["Director", "Reputation"])
                ]
     if output == 'html':
-        for query in queries:
-            html_result += "<h3>{0}</h3>".format(query[0])
-            q_result, elapsed = Timer.get_query_time(query[1])
-            html_result += HtmlGenerator().list_to_table(query[2], q_result, elapsed)
-
-        # logger.debug(html_result)
-        HtmlGenerator.generate_html(_template, html_result, _output)
+        gen = HtmlGenerator()
+        gen.generate(queries, _template, _output)
+        gen.generate(long_queries, _template, _output_d)
+    logger.debug('End processing at: {0}'.format(datetime.datetime.now()))
 
 if __name__ == '__main__':
     parser = optparse.OptionParser()
