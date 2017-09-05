@@ -17,10 +17,10 @@ Adicionalmente, agregar el tiempo que toma el procesar los datos para lograr los
 9 - ¿En qué año se lanzaron más películas?
 10 - ¿En qué año se lanzaron menos películas?
 11 - Crear un ranking de actores donde aparezca:
-	- la cantidad de películas en las que participó el actor
-	- su influencia en las redes sociales
-	- su mejor película
-	- ordenado por cantidad de actuaciones
+	..* - la cantidad de películas en las que participó el actor
+	..* - su influencia en las redes sociales
+	..* - su mejor película
+	..* - ordenado por cantidad de actuaciones
 12 - Crear un tag cloud usando los tags o keywords de las películas. 
 Para hacer esto solo basta con crear y mostrar un ranking de palabras y su peso (cantidad de apariciones de la palabra), ordenado de mayor a menor.
 13 - ¿Que genero de películas recaudó más dinero para cada año?
@@ -29,11 +29,13 @@ Para hacer esto solo basta con crear y mostrar un ranking de palabras y su peso 
 16 - ¿Que genero les gusta más a las personas?
 17 - ¿Cuales son los 5 directores con mejor reputación?
 
-Archivo con datos de películas: 
-https://drive.google.com/open?id=0B7BCSacG-KJgUE1YRW9wUEQwUDQ
+[Archivo con datos de películas:](https://drive.google.com/open?id=0B7BCSacG-KJgUE1YRW9wUEQwUDQ)
 
 
 
 ## Como ejecutar el script
-python etl.py -o html -f <dataset.csv>
+```sh
+$ python etl.py -o html -f <archivo csv descargado del link>
+
+```
 
