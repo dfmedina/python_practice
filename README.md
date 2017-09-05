@@ -32,3 +32,8 @@ Para hacer esto solo basta con crear y mostrar un ranking de palabras y su peso 
 Archivo con datos de películas: 
 https://drive.google.com/open?id=0B7BCSacG-KJgUE1YRW9wUEQwUDQ
 
+
+
+## Como ejecutar el script
+python etl.py -o html -f <dataset.csv>
+
